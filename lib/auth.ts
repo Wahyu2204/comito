@@ -23,7 +23,7 @@ export async function getSession() {
 export async function requireAuth() {
   const user = await getCurrentUser();
   if (!user) {
-    redirect("/api/auth/signin");
+    redirect("/login");
   }
   return user;
 }

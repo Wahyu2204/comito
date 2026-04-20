@@ -17,6 +17,7 @@ export default async function HistoryPage() {
     id: string;
     repo_name: string;
     pr_url: string | null;
+    output: string;
     created_at: string;
   }[] = [];
   let error: string | null = null;
@@ -33,6 +34,7 @@ export default async function HistoryPage() {
         id: true,
         repo_name: true,
         pr_url: true,
+        output: true,
         created_at: true,
       },
     });
@@ -41,6 +43,7 @@ export default async function HistoryPage() {
       id: gen.id.toString(),
       repo_name: gen.repo_name,
       pr_url: gen.pr_url,
+      output: gen.output,
       created_at: gen.created_at.toISOString(),
     }));
   } catch (err) {

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { CopyButton } from "@/components/CopyButton";
+import { ArrowLeftIcon } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
 
@@ -52,44 +53,28 @@ export default async function GenerationDetailPage({ params }: PageProps) {
 
   if (error) {
     return (
-      <div className="min-h-screen p-8">
+      <div className="w-full text-center">
+        <p className="text-zinc-500 mb-6">{error}</p>
         <Link
-          href="/dashboard"
-          className="text-sm text-black/60 hover:text-black mb-6 inline-block"
+          href="/dashboard/history"
+          className="px-5 py-2.5 border border-zinc-200 dark:border-zinc-700 text-sm font-medium rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
         >
-          ← Back to Dashboard
+          Back to History
         </Link>
-        <div className="flex flex-col items-center justify-center py-16">
-          <p className="text-black/60 mb-6">{error}</p>
-          <Link
-            href="/dashboard"
-            className="px-6 py-3 border border-black/20 text-sm font-medium hover:bg-black/5 transition-colors"
-          >
-            Back to Dashboard
-          </Link>
-        </div>
       </div>
     );
   }
 
   if (!generation) {
     return (
-      <div className="min-h-screen p-8">
+      <div className="w-full text-center">
+        <p className="text-zinc-500 mb-6">Generation not found</p>
         <Link
-          href="/dashboard"
-          className="text-sm text-black/60 hover:text-black mb-6 inline-block"
+          href="/dashboard/history"
+          className="px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black text-sm font-medium rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
         >
-          ← Back to Dashboard
+          Back to History
         </Link>
-        <div className="flex flex-col items-center justify-center py-16">
-          <p className="text-black/60 mb-6">Generation not found</p>
-          <Link
-            href="/dashboard"
-            className="px-6 py-3 bg-black text-white text-sm font-medium hover:bg-black/80 transition-colors"
-          >
-            Back to Dashboard
-          </Link>
-        </div>
       </div>
     );
   }
@@ -103,46 +88,46 @@ export default async function GenerationDetailPage({ params }: PageProps) {
   });
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="w-full max-w-5xl mx-auto">
+      {/* Back Link */}
       <Link
-        href="/dashboard"
-        className="text-sm text-black/60 hover:text-black mb-6 inline-block"
+        href="/dashboard/history"
+        className="flex items-center gap-2 text-sm text-zinc-500 hover:text-black dark:hover:text-white mb-6 transition-colors"
       >
-        ← Back to Dashboard
+        <ArrowLeftIcon className="w-4 h-4" />
+        Back to History
       </Link>
 
-      <div className="max-w-4xl">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-2">{generation.repo_name}</h1>
-          {generation.pr_url ? (
-            <a
-              href={generation.pr_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-black/60 hover:text-black font-mono"
-            >
-              {generation.pr_url}
-            </a>
-          ) : (
-            <span className="text-sm text-black/60">Manual diff input</span>
-          )}
-          <p className="text-xs text-black/40 mt-1">{formattedDate}</p>
-        </div>
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-xl font-bold mb-2">{generation.repo_name}</h1>
+        {generation.pr_url ? (
+          <a
+            href={generation.pr_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-zinc-500 hover:text-black dark:hover:text-white font-mono"
+          >
+            {generation.pr_url}
+          </a>
+        ) : (
+          <span className="text-sm text-zinc-500">Manual diff input</span>
+        )}
+        <p className="text-xs text-zinc-400 mt-1">{formattedDate}</p>
+      </div>
 
-        {/* Markdown Output */}
-        <div className="border border-black/10">
-          <div className="flex items-center justify-between px-4 py-3 bg-black/5 border-b border-black/10">
-            <span className="text-xs font-medium text-black/60 uppercase tracking-wide">
-              Generated Description
-            </span>
-            <CopyButton text={generation.output} />
-          </div>
-          <div className="p-6 max-h-[60vh] overflow-auto">
-            <pre className="text-sm whitespace-pre-wrap font-mono leading-relaxed">
-              {generation.output}
-            </pre>
-          </div>
+      {/* Markdown Output */}
+      <div className="border border-zinc-200 dark:border-zinc-700 rounded-lg overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 bg-zinc-50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700">
+          <span className="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">
+            Generated Description
+          </span>
+          <CopyButton text={generation.output} />
+        </div>
+        <div className="p-6 max-h-[50vh] overflow-auto bg-white dark:bg-zinc-900">
+          <pre className="text-sm whitespace-pre-wrap font-mono leading-relaxed text-zinc-700 dark:text-zinc-300">
+            {generation.output}
+          </pre>
         </div>
       </div>
     </div>
